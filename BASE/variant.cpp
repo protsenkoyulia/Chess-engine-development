@@ -5,7 +5,6 @@ The original source code can be found here: https://github.com/niklasf/python-ch
 */
 
 #include "variant.h"
-#include <iostream>
 
 namespace chess
 {

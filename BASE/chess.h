@@ -9,6 +9,9 @@ A chess library with move generation and validation,
 and XBoard/UCI engine communication.
 */
 
+#ifndef CHESS_ENGINE_CHESS_H
+#define CHESS_ENGINE_CHESS_H
+
 #include <string>
 #include <unordered_map>
 #include <stdexcept>
@@ -30,13 +33,6 @@ and XBoard/UCI engine communication.
 
 namespace chess
 {
-
-    std::string __author__ = "Patrick Johnson";
-
-    std::string __email__ = "pjpuzzler@gmail.com";
-
-    std::string __version__ = "1.0.0";
-
     typedef std::string _EnPassantSpec;
 
     typedef bool Color;
@@ -1162,3 +1158,5 @@ struct std::hash<chess::Piece>
         return piece.piece_type + (piece.color ? -1 : 5);
     }
 };
+
+#endif //CHESS_ENGINE_CHESS_H

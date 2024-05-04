@@ -4,7 +4,10 @@ All credit for the original code and algorithms go to niklasf and his credits
 The original source code can be found here: https://github.com/niklasf/python-chess
 */
 
-#include "chess.cpp"
+#ifndef CHESS_ENGINE_VARIANT_H
+#define CHESS_ENGINE_VARIANT_H
+
+#include "chess.h"
 
 namespace chess
 {
@@ -49,3 +52,5 @@ namespace chess
             bool is_variant_loss() const;
     };
 }
+
+#endif

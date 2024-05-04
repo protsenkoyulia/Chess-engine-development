@@ -6,7 +6,6 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-
 find_package(Qt5 COMPONENTS
         Core
         Gui
@@ -15,10 +14,8 @@ find_package(Qt5 COMPONENTS
 
 add_executable(chess_engine main.cpp
         UI/Board.cpp
-        UI/Piece.h
         UI/Piece.cpp
-        BASE/chess.cpp
-        BASE/variant.cpp
+        BASE/chess.h
 )
 target_link_libraries(chess_engine
         Qt5::Core
