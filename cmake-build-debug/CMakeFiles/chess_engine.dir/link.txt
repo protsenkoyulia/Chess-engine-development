@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/chess_engine.dir/chess_engine_autogen/mocs_compilation.cpp.o CMakeFiles/chess_engine.dir/main.cpp.o CMakeFiles/chess_engine.dir/UI/Board.cpp.o CMakeFiles/chess_engine.dir/UI/Piece.cpp.o -o chess_engine  /usr/lib/x86_64-linux-gnu/libQt5Widgets.so.5.15.3 /usr/lib/x86_64-linux-gnu/libQt5Gui.so.5.15.3 /usr/lib/x86_64-linux-gnu/libQt5Core.so.5.15.3 
