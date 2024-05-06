@@ -74,6 +74,8 @@ QString UI::Piece::convertTypeToUNICODE(UI::PieceType type) {
 void UI::Piece::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         oldPos = event->pos();
+
+        emit selected(this);
     }
 }
 
@@ -85,5 +87,3 @@ void UI::Piece::mouseMoveEvent(QMouseEvent *event) {
 void UI::Piece::mouseReleaseEvent(QMouseEvent *event) {
     emit doMove(this);
 }
-
-

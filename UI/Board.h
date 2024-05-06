@@ -17,6 +17,8 @@ namespace UI {
 
         Piece*** pieces;
 
+        QPoint fromMove;
+
     public:
 
         explicit Board(QWidget* parent = nullptr);
@@ -35,11 +37,19 @@ namespace UI {
 
         void parseFen(QString);
 
+        void clearBoard();
+
         static PieceType parseFenToPieceType(char);
+
+        static QString convertCoordinateToChessPosition(QPoint);
 
     private slots:
 
-        void handleMove(Piece*);
+        void handleSelected(Piece *);
+
+        void handleMove(Piece *);
+
+        void updateBoard(QObject *);
 
     };
 

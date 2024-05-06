@@ -11,6 +11,7 @@
 #include <QMouseEvent>
 
 namespace UI {
+
     enum PieceType {
         WHITE_KING,
         WHITE_QUEEN,
@@ -41,11 +42,11 @@ namespace UI {
 
         explicit Piece(PieceType, QWidget* parent = nullptr);
 
-        Piece(const Piece&);
+        Piece(const Piece &);
 
         ~Piece() override;
 
-        Piece& operator = (const Piece&);
+        Piece& operator = (const Piece &);
 
     protected:
 
@@ -61,8 +62,9 @@ namespace UI {
 
     signals:
 
-        void doMove(Piece*);
+        void doMove(Piece *);
 
+        void selected(Piece *);
     };
 
 }

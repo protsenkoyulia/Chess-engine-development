@@ -5,6 +5,7 @@
 #include "Board.h"
 #include <stdexcept>
 #include <QDebug>
+#include "../util.h"
 
 namespace UI {
 
@@ -12,7 +13,14 @@ namespace UI {
     {
         initCells();
         initPiece();
-        parseFen("8/8/5k2/8/8/8/8/8");
+
+        connect(
+                util::BoardImage::getUpdateObject(),
+                SIGNAL(destroyed(QObject *)),
+                this,
+                SLOT(updateBoard(QObject *)));
+
+        updateBoard(nullptr);
     }
 
     Board::~Board() {
@@ -62,6 +70,10 @@ namespace UI {
 
         for (int i = 0; i < 8; i++) {
             pieces[i] = new Piece *[8];
+
+            for (int j = 0; j < 8; j++) {
+                pieces[i][j] = nullptr;
+            }
         }
     }
 
@@ -69,19 +81,14 @@ namespace UI {
         auto* piece = new Piece(type, this);
 
         connect(piece, SIGNAL(doMove(Piece *)), this, SLOT(handleMove(Piece *)));
+        connect(piece, SIGNAL(selected(Piece *)), this, SLOT(handleSelected(Piece *)));
 
         return piece;
     }
 
-    void Board::handleMove(Piece *piece) {
-        int x = (piece->pos().x() + 50) / 100;
-        int y = (piece->pos().y() + 50) / 100;
-
-        auto cell = cells[x][y];
-        piece->setGeometry(cell->x(), cell->y(), 100, 100);
-    }
-
     void Board::parseFen(QString fen) {
+        clearBoard();
+
         int index = fen.indexOf(" ");
         fen = (index != -1) ? fen.left(index) : fen;
 
@@ -103,6 +110,7 @@ namespace UI {
                 Piece* piece = createPiece(parseFenToPieceType(left[j].toLatin1()));
                 const QPoint &point = cells[step][i]->pos();
                 piece->setGeometry(point.x(), point.y(), 100, 100);
+                piece->show();
 
                 pieces[step][i] = piece;
             }
@@ -138,6 +146,59 @@ namespace UI {
             default:
                 throw std::invalid_argument("cannot convert symbol to piece!");;
         }
+    }
+
+    QString Board::convertCoordinateToChessPosition(QPoint coordinate) {
+        QString chessPosition = QString();
+
+        unsigned column = coordinate.x() / 100;
+        unsigned row = coordinate.y() / 100;
+
+        chessPosition.append('a' + column);
+        chessPosition.append(QString::number(8 - row));
+
+        return chessPosition;
+    }
+
+    void Board::handleSelected(Piece *piece) {
+        fromMove = piece->pos();
+    }
+
+    void Board::handleMove(Piece *piece) {
+        int x = (piece->pos().x() + 50) / 100;
+        int y = (piece->pos().y() + 50) / 100;
+
+        if (x >= 8 || x < 0 || y >= 8 || y < 0) {
+            piece->setGeometry(fromMove.x(), fromMove.y(), 100, 100);
+            return;
+        }
+
+        auto cell = cells[x][y];
+
+        QString move =convertCoordinateToChessPosition(fromMove)
+                .append(convertCoordinateToChessPosition(cell->pos()));
+
+        if (util::MoveValidator::isValidMove(move.toStdString())) {
+            piece->setGeometry(cell->x(), cell->y(), 100, 100);
+            util::BoardImage::doMove(move.toStdString());
+        } else {
+            piece->setGeometry(fromMove.x(), fromMove.y(), 100, 100);
+        }
+    }
+
+    void Board::clearBoard() {
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                delete pieces[i][j];
+                pieces[i][j] = nullptr;
+            }
+        }
+    }
+
+    void Board::updateBoard(QObject* unused) {
+        parseFen(QString::fromStdString(util::BoardImage::getBoardFen()));
     }
 
 } // UI

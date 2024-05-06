@@ -16,6 +16,7 @@ add_executable(chess_engine main.cpp
         UI/Board.cpp
         UI/Piece.cpp
         BASE/chess.h
+        util.h
 )
 target_link_libraries(chess_engine
         Qt5::Core
